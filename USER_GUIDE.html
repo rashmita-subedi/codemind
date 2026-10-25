@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeMind — User Guide</title>
+<style>
+  :root {
+    --ink: #1a2230;
+    --muted: #5b6b7a;
+    --accent: #0d7d8c;
+    --accent-dark: #0a5c68;
+    --accent-soft: #e6f4f5;
+    --line: #e2e8ee;
+    --code-bg: #1e2733;
+    --code-ink: #e6edf3;
+    --note-bg: #eef6ff;
+    --note-line: #3b82f6;
+    --warn-bg: #fff7ed;
+    --warn-line: #f59e0b;
+    --new-bg: #ecfdf3;
+    --new-line: #16a34a;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    line-height: 1.65;
+    margin: 0;
+    background: #f4f6f9;
+    font-size: 15.5px;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 32px auto;
+    background: #fff;
+    padding: 0 56px 64px;
+    box-shadow: 0 4px 24px rgba(20, 34, 48, 0.08);
+    border-radius: 6px;
+  }
+
+  /* ---- Cover ---- */
+  .cover {
+    margin: 0 -56px 40px;
+    padding: 56px 56px 44px;
+    background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+    color: #fff;
+    border-radius: 6px 6px 0 0;
+  }
+  .cover .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.85;
+    margin: 0 0 12px;
+  }
+  .cover h1 {
+    font-size: 46px;
+    margin: 0 0 6px;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+  .cover .subtitle {
+    font-size: 18px;
+    font-weight: 400;
+    opacity: 0.92;
+    margin: 0 0 28px;
+  }
+  .cover .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    font-size: 13px;
+    border-top: 1px solid rgba(255,255,255,0.25);
+    padding-top: 18px;
+  }
+  .cover .meta b { font-weight: 600; }
+  .cover .meta span { opacity: 0.9; }
+
+  /* ---- Lead ---- */
+  .lead {
+    font-size: 16.5px;
+    color: #38465a;
+    margin: 0 0 36px;
+  }
+
+  /* ---- TOC ---- */
+  .toc {
+    background: var(--accent-soft);
+    border: 1px solid #cfe7ea;
+    border-radius: 8px;
+    padding: 22px 26px;
+    margin: 0 0 44px;
+  }
+  .toc h2 {
+    margin: 0 0 12px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent-dark);
+    border: none;
+    padding: 0;
+  }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    columns: 2;
+    column-gap: 40px;
+  }
+  .toc li { margin: 5px 0; }
+  .toc a { color: var(--ink); text-decoration: none; }
+  .toc a:hover { color: var(--accent); }
+
+  /* ---- Headings ---- */
+  h2 {
+    font-size: 25px;
+    margin: 48px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--line);
+    letter-spacing: -0.4px;
+  }
+  h2 .num {
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 10px;
+  }
+  h3 {
+    font-size: 18px;
+    margin: 30px 0 10px;
+    color: var(--accent-dark);
+  }
+
+  p { margin: 12px 0; }
+  a { color: var(--accent); }
+
+  /* ---- Code ---- */
+  code {
+    font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.86em;
+    background: #eef1f4;
+    color: #b3306e;
+    padding: 1.5px 6px;
+    border-radius: 4px;
+  }
+  pre {
+    background: var(--code-bg);
+    color: var(--code-ink);
+    padding: 16px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    line-height: 1.55;
+    font-size: 13.5px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+  }
+  pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    font-size: 13.5px;
+  }
+  .comment { color: #8b98a5; }
+
+  /* ---- Tables ---- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    font-size: 14px;
+  }
+  th {
+    background: var(--accent-dark);
+    color: #fff;
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.2px;
+  }
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #f8fafb; }
+  td code { white-space: nowrap; }
+
+  /* ---- Callouts ---- */
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px 14px 18px;
+    margin: 20px 0;
+    border-left: 4px solid;
+    font-size: 14.5px;
+  }
+  .callout .tag {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .callout.note { background: var(--note-bg); border-color: var(--note-line); }
+  .callout.note .tag { color: var(--note-line); }
+  .callout.warn { background: var(--warn-bg); border-color: var(--warn-line); }
+  .callout.warn .tag { color: #b45309; }
+  .callout.new  { background: var(--new-bg);  border-color: var(--new-line); }
+  .callout.new .tag { color: var(--new-line); }
+  .callout p:first-of-type { margin-top: 0; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .pill {
+    display: inline-block;
+    background: var(--new-line);
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 20px;
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+
+  ul li, ol li { margin: 6px 0; }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin: 40px 0;
+  }
+
+  footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* ---- Print ---- */
+  @media print {
+    body { background: #fff; font-size: 11pt; }
+    .page { box-shadow: none; margin: 0; max-width: none; padding: 0 0 0; border-radius: 0; }
+    .cover { margin: 0 0 28px; border-radius: 0; }
+    .toc { break-inside: avoid; }
+    h2 { break-after: avoid; }
+    h3 { break-after: avoid; }
+    pre, table, .callout { break-inside: avoid; }
+    a { color: var(--ink); text-decoration: none; }
+    @page { margin: 16mm 14mm; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="cover">
+    <p class="eyebrow">Repo-aware AI Assistant</p>
+    <h1>CodeMind</h1>
+    <p class="subtitle">User Guide</p>
+    <div class="meta">
+      <span><b>Version</b> 0.0.1-SNAPSHOT</span>
+      <span><b>Audience</b> Developers</span>
+      <span><b>Scope</b> CLI &amp; Interactive Shell</span>
+    </div>
+  </header>
+
+  <p class="lead">
+    CodeMind is a repo-aware AI assistant you run from your terminal. Point it at a
+    codebase and it can answer questions about the code, explain end-to-end API flows,
+    propose and apply refactors, and draft commit messages and changelogs — all grounded
+    in the actual files it has indexed.
+  </p>
+
+  <nav class="toc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#quick-start">Quick start</a></li>
+      <li><a href="#prerequisites">Prerequisites</a></li>
+      <li><a href="#commands">Commands</a></li>
+      <li><a href="#repl">Interactive shell (REPL)</a></li>
+      <li><a href="#models">Models &amp; vector store</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+    </ol>
+  </nav>
+
+  <p>There are two ways to use CodeMind:</p>
+  <ul>
+    <li><b>Subcommands</b> — one-shot commands like <code>codemind ask "..."</code> or <code>codemind commit</code>. Best for scripting and quick tasks.</li>
+    <li><b>Interactive shell (REPL)</b> — launch with no arguments and chat with the assistant. Best for exploring a repo.</li>
+  </ul>
+
+  <h2 id="quick-start"><span class="num">1</span>Quick start</h2>
+
+  <pre><code><span class="comment"># 1. Build</span>
+mvn clean package
+
+<span class="comment"># 2. Start the vector store + embeddings (Docker)</span>
+docker compose up -d chroma ollama ollama-pull
+
+<span class="comment"># 3a. Run a one-shot command</span>
+java -jar target/codemind.jar ask "what does the login flow do?"
+
+<span class="comment"># 3b. …or open the interactive shell</span>
+java -jar target/codemind.jar</code></pre>
+
+  <p>
+    On startup the interactive shell automatically indexes the directory you launched it
+    from, so open your terminal in the repo (or parent workspace) you want analyzed
+    <i>before</i> you run it.
+  </p>
+
+  <div class="callout note">
+    <span class="tag">No Docker?</span>
+    <p>Set <code>CODEMIND_VECTOR_STORE=memory</code> to use the in-process fallback store
+    (hash-based embeddings — functional, lower recall, no Chroma/Ollama needed).</p>
+  </div>
+
+  <h2 id="prerequisites"><span class="num">2</span>Prerequisites</h2>
+  <ul>
+    <li><b>Java 21+</b></li>
+    <li><b>Maven</b> (use your system <code>mvn</code>)</li>
+    <li><b>Docker</b> for the Chroma vector store + Ollama embeddings — <i>or</i> <code>CODEMIND_VECTOR_STORE=memory</code> to skip it</li>
+    <li><b>API key</b> for the chat model, exported as <code>CODEMIND_AIHUB_KEY</code> (falls back to the default key in <code>application.yaml</code> if unset)</li>
+  </ul>
+
+  <h2 id="commands"><span class="num">3</span>Commands</h2>
+  <p>
+    Run any of these as <code>java -jar target/codemind.jar &lt;command&gt;</code>, or type them
+    at the shell prompt (without the <code>java -jar …</code> part).
+  </p>
+
+  <table>
+    <thead><tr><th style="width:30%">Command</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>index [path]</code></td><td>Index a repo for semantic search. Defaults to the current directory. Add <code>--force</code> to re-index unchanged files.</td></tr>
+      <tr><td><code>ask "&lt;question&gt;"</code></td><td>Ask a natural-language question about the indexed code. Add <code>--verbose</code> to see the reasoning trace.</td></tr>
+      <tr><td><code>refactor &lt;path&gt;</code></td><td>Analyse a file/folder for code smells and propose a phased refactor plan. Add <code>--apply</code> to apply Phase-1 safe extractions, <code>--verbose</code> for the full trace.</td></tr>
+      <tr><td><code>commit</code></td><td>Stage changes, draft a Conventional Commits message from the diff, and create the commit (after confirmation).</td></tr>
+      <tr><td><code>changelog [range]</code></td><td>Draft a changelog from a git revision range (default <code>HEAD~1..HEAD</code>). Add <code>--plain</code> for a plain-English paragraph instead of the grouped list.</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    Two more commands exist but are hidden (advanced / not user-facing yet):
+    <code>do "&lt;free-form request&gt;"</code> routes any request to the right specialist
+    automatically, and <code>rollback</code> (placeholder) will restore files from a previous
+    <code>refactor --apply</code>.
+  </p>
+
+  <h3>index</h3>
+  <pre><code>codemind index                       <span class="comment"># index the current directory</span>
+codemind index "D:\workspace\bank-service"
+codemind index --force .             <span class="comment"># re-index everything, ignore the cache</span></code></pre>
+  <p>For a fleet of microservices, index the <b>parent</b> workspace so cross-service questions work:</p>
+  <pre><code>codemind index "D:\workspace\Central Services"</code></pre>
+
+  <h3>ask</h3>
+  <pre><code>codemind ask "list all REST endpoints grouped by module"
+codemind ask "explain the customer onboarding flow end to end" --verbose</code></pre>
+
+  <h3>refactor</h3>
+  <pre><code>codemind refactor src/main/java/com/acme/OrderService.java          <span class="comment"># analyse only</span>
+codemind refactor src/main/java/com/acme/OrderService.java --apply   <span class="comment"># analyse, then apply Phase 1</span></code></pre>
+  <p>
+    <code>--apply</code> first prints the plan, then asks
+    <b>"Apply Phase-1 refactor to …?"</b> before changing anything. Files are backed up
+    before they're rewritten.
+  </p>
+
+  <h3>commit <span class="pill">New behavior</span></h3>
+  <p><code>commit</code> now performs the whole flow end-to-end:</p>
+  <ol>
+    <li>If nothing is staged, it stages everything with <code>git add -A</code>. (If you've already pre-staged a partial change, it leaves your staging alone.)</li>
+    <li>It reads the staged diff and drafts a <b>Conventional Commits</b> message (<code>feat(cli): …</code>, <code>fix(agent): …</code>, etc.).</li>
+    <li>It shows you the message and asks <b>"Apply this commit?"</b></li>
+    <li>On confirmation it runs <code>git commit -F</code> with the drafted message.</li>
+  </ol>
+  <pre><code>codemind commit</code></pre>
+  <div class="callout note">
+    <span class="tag">Safe by default</span>
+    <p>If the working tree is clean (or you're not in a git repo), it prints
+    <i>"Nothing to commit"</i> and stops. It also refuses to commit if the model returned
+    an error instead of a real message.</p>
+  </div>
+
+  <h3>changelog</h3>
+  <pre><code>codemind changelog                      <span class="comment"># HEAD~1..HEAD, grouped by type</span>
+codemind changelog HEAD~5..HEAD         <span class="comment"># last 5 commits</span>
+codemind changelog v1.2.0..HEAD --plain <span class="comment"># plain-English paragraph</span></code></pre>
+  <p>
+    The default grouped output sorts changes into Features / Fixes / Refactors / Perf /
+    Other based on Conventional-Commit types; <code>--plain</code> produces a narrative
+    summary instead.
+  </p>
+
+  <h2 id="repl"><span class="num">4</span>Interactive shell (REPL)</h2>
+  <p>Launch with no arguments:</p>
+  <pre><code>java -jar target/codemind.jar</code></pre>
+  <p>You'll get a prompt that shows the current mode:</p>
+  <pre><code>  codemind  ask  &gt;</code></pre>
+  <p>Just type a question — you don't need to prefix it with <code>ask</code>:</p>
+  <pre><code>  codemind  ask  &gt;  where is the JWT token validated?</code></pre>
+
+  <h3>Modes</h3>
+  <div class="callout new">
+    <span class="tag">Changed</span>
+    <p>CodeMind now has <b>one</b> mode switch with two settings. This replaces the old
+    two-axis <code>ask|agentic</code> + <code>manual|auto</code> system — there is no separate
+    "execution mode" anymore.</p>
+  </div>
+  <table>
+    <thead><tr><th style="width:24%">Mode</th><th>Behavior</th></tr></thead>
+    <tbody>
+      <tr><td><b>ask</b> (default)</td><td>Q&amp;A and analysis. Destructive actions (commit, refactor apply) <b>ask for confirmation</b> first.</td></tr>
+      <tr><td><b>agentic</b></td><td>Deeper cross-file reasoning, and destructive actions <b>auto-apply</b> without prompting.</td></tr>
+    </tbody>
+  </table>
+  <p>Switch between them:</p>
+  <ul>
+    <li><code>/a</code> or <code>/mode</code> — toggle ask ↔ agentic</li>
+    <li><code>/ask</code> — force ask mode</li>
+    <li><code>/agentic</code> — force agentic mode</li>
+    <li><code>Alt+A</code> — keyboard toggle</li>
+  </ul>
+  <pre><code>  codemind  ask  &gt;  /a
+  mode: agentic
+  codemind  agentic  &gt;  explain the full payment flow across all services</code></pre>
+
+  <h3>Shell built-ins</h3>
+  <table>
+    <thead><tr><th style="width:32%">Input</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><code>index [path]</code></td><td>re-index (current dir by default)</td></tr>
+      <tr><td><code>commit</code></td><td>draft + apply a commit (asks first in ask mode, auto-applies in agentic)</td></tr>
+      <tr><td><code>changelog [range] [plain]</code></td><td>draft a changelog</td></tr>
+      <tr><td><code>refactor &lt;path&gt;</code></td><td>plan + apply a refactor (asks first in ask mode)</td></tr>
+      <tr><td><code>clear</code></td><td>clear the screen, reset to ask mode, re-index the current directory</td></tr>
+      <tr><td><code>help</code></td><td>list commands</td></tr>
+      <tr><td><code>exit</code> / <code>quit</code></td><td>close CodeMind</td></tr>
+      <tr><td><code>!&lt;command&gt;</code></td><td>run a raw shell command in the project directory (e.g. <code>!git status</code>)</td></tr>
+    </tbody>
+  </table>
+  <p>
+    Short, well-known shell commands (like <code>git status</code>, <code>ls</code>,
+    <code>docker ps</code>) are detected and run directly even without the <code>!</code>
+    prefix. Anything that looks like a question is sent to the assistant instead.
+  </p>
+
+  <h3>Shell UX tips</h3>
+  <ul>
+    <li><b>Tab</b> completes commands and modes.</li>
+    <li><b>Up / Down</b> browse input history (persisted to <code>~/.codemind_history</code>).</li>
+    <li><b>Ctrl+C</b> cancels the in-flight operation and returns to the prompt.</li>
+  </ul>
+  <div class="callout warn">
+    <span class="tag">IntelliJ note</span>
+    <p>If Up/Down doesn't work inside IntelliJ's plain Run console, enable terminal
+    emulation for that run configuration, or run CodeMind from Windows Terminal /
+    PowerShell. The plain console doesn't always forward arrow-key escape sequences.</p>
+  </div>
+
+  <h2 id="models"><span class="num">5</span>Models &amp; vector store</h2>
+  <p>CodeMind splits chat and embedding traffic across two backends:</p>
+  <ul>
+    <li><b>Chat model</b> — org OpenAI-compatible endpoint (<code>qwen3.5-35b</code> on <code>https://ai-hub.f1arl.com</code>). Your <code>CODEMIND_AIHUB_KEY</code> only permits this model.</li>
+    <li><b>Embeddings</b> — Ollama in Docker. Default <code>all-minilm</code> (384-dim, fast). Swap to <code>nomic-embed-text</code> (768-dim, better recall) via <code>OLLAMA_EMBED_MODEL=nomic-embed-text</code>.</li>
+    <li><b>Vector store</b> — Chroma in Docker.</li>
+  </ul>
+  <div class="callout warn">
+    <span class="tag">Re-index required</span>
+    <p>If you change <code>OLLAMA_EMBED_MODEL</code> you must re-index — collections are
+    pinned to the original embedding dimension. Delete <code>&lt;repo&gt;/.codemind</code> and
+    the Chroma <code>codemind</code> collection, then <code>index &lt;path&gt;</code> again.</p>
+  </div>
+
+  <h3>Configuration knobs</h3>
+  <p>All optional — defaults match <code>docker-compose.yml</code>:</p>
+  <table>
+    <thead><tr><th>Variable</th><th>Default</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>CODEMIND_AIHUB_KEY</code></td><td>(yaml default)</td><td>Chat model API key</td></tr>
+      <tr><td><code>CODEMIND_VECTOR_STORE</code></td><td><code>chroma</code></td><td><code>memory</code> bypasses Chroma + Ollama</td></tr>
+      <tr><td><code>OLLAMA_EMBED_MODEL</code></td><td><code>all-minilm</code></td><td>Embedding model (re-index after changing)</td></tr>
+      <tr><td><code>OLLAMA_BASE_URL</code></td><td><code>http://localhost:11434</code></td><td>Ollama endpoint</td></tr>
+      <tr><td><code>CHROMA_HOST</code> / <code>CHROMA_PORT</code></td><td><code>http://localhost</code> / <code>8000</code></td><td>Chroma endpoint</td></tr>
+      <tr><td><code>CHROMA_COLLECTION</code></td><td><code>codemind</code></td><td>Chroma collection name</td></tr>
+      <tr><td><code>CHROMA_TENANT</code> / <code>CHROMA_DATABASE</code></td><td><code>default_tenant</code> / <code>default_database</code></td><td>Chroma namespace</td></tr>
+    </tbody>
+  </table>
+
+  <p>Indexing tuning (in <code>application.yaml</code>):</p>
+  <ul>
+    <li><code>codemind.embed.parallelism</code> (default 4) — concurrent batches to Ollama.</li>
+    <li><code>codemind.embed.batch-size</code> (default 16) — chunks per batch.</li>
+    <li><code>codemind.patterns.max-file-size-bytes</code> (default 1,000,000) — skip large/generated files.</li>
+    <li><code>codemind.patterns.*</code> — override language/framework classification keywords for your stack.</li>
+  </ul>
+
+  <h3>Local caches</h3>
+  <pre><code>&lt;repo&gt;/.codemind/chunks.bin   <span class="comment"># Chroma mode: chunk text/metadata (vectors live in Chroma)</span>
+&lt;repo&gt;/.codemind/index.bin    <span class="comment"># memory mode: chunks + local embedding vectors</span></code></pre>
+  <p>The <code>.codemind</code> folder is self-git-ignored, so it won't pollute the repos you index.</p>
+
+  <h2 id="troubleshooting"><span class="num">6</span>Troubleshooting</h2>
+
+  <h3>No useful answer</h3>
+  <ul>
+    <li>Make sure you indexed the right repo/workspace (<code>index &lt;path&gt;</code>).</li>
+    <li>For broad cross-file questions, switch to <code>agentic</code> mode.</li>
+    <li>Indexing failures now tell you whether the path is missing, not a directory, or unreadable.</li>
+  </ul>
+
+  <h3>Model call / config failures</h3>
+  <ul>
+    <li>Confirm <code>CODEMIND_AIHUB_KEY</code> is set in the same terminal.</li>
+    <li>Verify the endpoint URL and model name in <code>application.yaml</code>.</li>
+  </ul>
+
+  <h3>Chroma / vector store</h3>
+  <ul>
+    <li>Startup connection error → ensure <code>docker compose up -d chroma</code> is running and reachable at <code>${CHROMA_HOST}:${CHROMA_PORT}</code>.</li>
+    <li>No results after a Docker volume wipe → re-run <code>index &lt;path&gt;</code> to repopulate the collection.</li>
+    <li>To skip Chroma entirely → restart with <code>CODEMIND_VECTOR_STORE=memory</code>.</li>
+  </ul>
+
+  <h3>Ollama / embeddings</h3>
+  <ul>
+    <li><code>connection refused</code> to <code>localhost:11434</code> → Ollama container isn't up. <code>docker compose up -d ollama</code>, then <code>docker exec codemind-ollama ollama list</code> to confirm.</li>
+    <li><code>model not found</code> → the one-shot pull failed: <code>docker exec codemind-ollama ollama pull all-minilm</code>.</li>
+    <li>First index pass is slow → Ollama loads the model into memory on the first request; subsequent embeddings are fast.</li>
+  </ul>
+
+  <h3>commit did nothing</h3>
+  <ul>
+    <li>"Nothing to commit" means the working tree is clean or you're not in a git repo.</li>
+    <li>If it refused after drafting, the model returned an error string instead of a message — re-run, or check the staged diff is meaningful.</li>
+  </ul>
+
+  <h3>Confirmation prompts</h3>
+  <ul>
+    <li>Destructive actions prompt in <b>ask</b> mode and auto-apply in <b>agentic</b> mode. Switch with <code>/a</code> if you want the opposite behavior.</li>
+  </ul>
+
+  <footer>
+    <span>CodeMind — Org-internal CLI code intelligence</span>
+    <span>User Guide · v0.0.1-SNAPSHOT</span>
+  </footer>
+
+</div>
+</body>
+</html>

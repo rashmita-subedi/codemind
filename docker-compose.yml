@@ -1,0 +1,48 @@
+services:
+  chroma:
+    image: chromadb/chroma:0.6.3
+    container_name: codemind-chroma
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      IS_PERSISTENT: "TRUE"
+      ANONYMIZED_TELEMETRY: "FALSE"
+    volumes:
+      - chroma-data:/chroma/chroma
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: codemind-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    environment:
+      OLLAMA_NUM_PARALLEL: "4"
+      OLLAMA_KEEP_ALIVE: "30m"
+      OLLAMA_MAX_LOADED_MODELS: "2"
+    volumes:
+      - ollama-data:/root/.ollama
+
+  ollama-pull:
+    image: ollama/ollama:latest
+    container_name: codemind-ollama-pull
+    depends_on:
+      - ollama
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -e
+        until ollama list >/dev/null 2>&1; do
+          echo "waiting for ollama..."
+          sleep 2
+        done
+        ollama pull all-minilm
+        ollama pull nomic-embed-text
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    restart: "no"
+
+volumes:
+  chroma-data:
+  ollama-data:

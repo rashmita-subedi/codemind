@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: codemind
+  main:
+    banner-mode: off
+    web-application-type: none
+    lazy-initialization: true   # so `codemind --help` works without Chroma/Ollama running
+  ai:
+    model:
+      chat: openai
+      embedding: ollama
+    openai:
+      api-key: ${CODEMIND_AIHUB_KEY:sk-QlA8ua3WhM0aNA0RMVmhxw}
+      base-url: https://ai-hub.f1arl.com
+      chat:
+        options:
+          model: qwen3.5-35b
+          max-tokens: 8192
+      embedding:
+        enabled: false
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      chat:
+        enabled: false
+      embedding:
+        options:
+          model: ${OLLAMA_EMBED_MODEL:all-minilm}
+          truncate: true
+      init:
+        pull-model-strategy: when_missing
+        timeout: PT10M
+        embedding:
+          include: true
+    vectorstore:
+      chroma:
+        client:
+          host: ${CHROMA_HOST:http://localhost}
+          port: ${CHROMA_PORT:8000}
+        collection-name: ${CHROMA_COLLECTION:codemind}
+        tenant-name: ${CHROMA_TENANT:default_tenant}
+        database-name: ${CHROMA_DATABASE:default_database}
+        initialize-schema: true
+codemind:
+  execution:
+    mode: manual
+  vector-store: ${CODEMIND_VECTOR_STORE:chroma}
+  embed:
+    parallelism: ${CODEMIND_EMBED_PARALLELISM:8}
+    batch-size: ${CODEMIND_EMBED_BATCH:16}
+  shell:
+    interactive: true
+  memory:
+    window: ${CODEMIND_MEMORY_WINDOW:20}
+    max-chars: ${CODEMIND_MEMORY_MAX_CHARS:8000}
+    dir: ${CODEMIND_MEMORY_DIR:.codemind/sessions}
+  promptguard:
+    enabled: true
+logging:
+  level:
+    root: warn
+    com.codemind: warn
